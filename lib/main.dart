@@ -32,6 +32,30 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 }
+class BigCard extends StatelessWidget {
+  final WordPair pair;
+
+  const BigCard({super.key, required this.pair});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: EdgeInsets.all(20),
+        child: Text(
+          pair.asLowerCase,
+          style: theme.textTheme.displayMedium!.copyWith(
+            color: theme.colorScheme.onPrimary,
+          ),
+          semanticsLabel: '${pair.first} ${pair.second}',
+        ),
+      ),
+    );
+  }
+}
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -39,17 +63,20 @@ class MyHomePage extends StatelessWidget {
     var appState = context.watch<MyAppState>();
 
     return Scaffold(
-      body: Column(
-        children: [
-          Text('A random idea:'),
-          Text(appState.current.asLowerCase),
-          ElevatedButton(
-            onPressed: () {
-              appState.getNext();
-            },
-            child: Text('Next'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BigCard(pair: appState.current),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                appState.getNext();
+              },
+              child: Text('Next'),
+            ),
+          ],
+        ),
       ),
     );
   }
